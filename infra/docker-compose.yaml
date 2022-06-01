@@ -17,7 +17,7 @@ services:
       db:
         condition: service_healthy
 
-    image: ${{ secrets.DOCKER_USERNAME }}/yamdb_final
+    image: vav134/yamdb_final
     restart: always
     volumes:
       - static_value:/app/static/
