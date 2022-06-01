@@ -13,10 +13,10 @@ services:
       retries: 10
 
   web:
+    context: ./infra
     depends_on:
       db:
         condition: service_healthy
-
     image: vav134/yamdb_final
     restart: always
     volumes:
