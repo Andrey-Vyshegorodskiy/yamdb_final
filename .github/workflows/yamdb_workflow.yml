@@ -18,7 +18,8 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install flake8 pep8-naming flake8-broken-line flake8-return flake8-isort pytest
-          pip install -r /api_yamdb/requirements.txt
+          ls
+          pip install -r requirements.txt
       - name: Test with flake8 and django tests
         run: flake8 . --exclude tests/,*/migrations,venv --per-file-ignores */settings.py:E501 --ignore W503,F811,N806
 
