@@ -17,8 +17,7 @@ services:
       db:
         condition: service_healthy
 
-    image: vav134/yamdb_final
-    #  build: /home/vav134/infra_sp2/api_yamdb/
+    image: ${{ secrets.DOCKER_USERNAME }}/yamdb_final
     restart: always
     volumes:
       - static_value:/app/static/
