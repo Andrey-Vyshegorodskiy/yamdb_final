@@ -3,9 +3,9 @@ import sqlite3
 
 import pandas as pd
 from django.core.management.base import BaseCommand
+from reviews.models import Category, Comment, Genre, Review, Title, User
 
 from api_yamdb.settings import BASE_DIR
-from reviews.models import Category, Comment, Genre, Review, Title, User
 
 PATH = f'{BASE_DIR}/static/data/'
 

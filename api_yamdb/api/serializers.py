@@ -1,5 +1,4 @@
 from rest_framework import serializers
-
 from reviews.models import Category, Comment, Genre, Review, Title, User
 
 ERR_MESSAGE = 'Невозможно создать пользователя с заданным атрибутом.'
