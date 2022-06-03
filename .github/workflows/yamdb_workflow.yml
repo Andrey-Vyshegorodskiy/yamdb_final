@@ -10,7 +10,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.7
+          python-version: ["3.6", "3.7", "3.8", "3.9"]
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -46,7 +46,6 @@ jobs:
     env:
       PROJECT_ROOT: ~/yamdb_final
     needs: build_and_push_to_docker_hub
-    if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
     steps:
     - name: Check out the repo
       uses: actions/checkout@v2

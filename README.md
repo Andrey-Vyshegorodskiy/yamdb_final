@@ -1,7 +1,6 @@
 # CI и CD проекта api_yamdb ![Action status](https://github.com/Andrey-Vyshegorodskiy/yamdb_final/actions/workflows/yamdb_workflow.yml/badge.svg)
 
 ## yamdb_final
-yamdb_final
 ### Описание
 
 Ссылка на сайт:
@@ -18,18 +17,6 @@ http://84.201.141.50/redoc/
 Полная документация к API находится в http://84.201.141.50/redoc/
 ### Технологии
 Python 3.7, Django 2.2, DRF, JWT, docker
-### После развертывания проекта на удаленном сервере, обязательно выполнить:
-
-cd yamdb_final
-
-          sudo docker-compose exec web python manage.py migrate
-
-          sudo docker-compose exec web python manage.py collectstatic --no-input
-
-          sudo docker-compose exec web python manage.py loaddata dump.json
-
-
-
 
 ### Примеры работы с API для всех пользователей
 Подробная документация доступна по адресу /redoc/
@@ -139,7 +126,7 @@ PATCH /api/v1/titles/{titles_id}/
 
 Удаление произведения:
 ```
-DEL /api/v1/titles/{titles_id}/
+DELETE /api/v1/titles/{titles_id}/
 ```
 
 - Права доступа: user.
@@ -164,5 +151,5 @@ PATCH /api/v1/titles/{title_id}/reviews/{review_id}/
 
 Удаление отзыва:
 ```
-DEL /api/v1/titles/{title_id}/reviews/{review_id}/
+DELETE /api/v1/titles/{title_id}/reviews/{review_id}/
 ```
