@@ -11,7 +11,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', "testovy_key")
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['127.0.0.1', os.getenv('HOST')]
+ALLOWED_HOSTS = os.getenv("HOST").split(' ')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
