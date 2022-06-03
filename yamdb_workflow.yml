@@ -73,6 +73,8 @@ jobs:
 
   loaddata:
     runs-on: ubuntu-latest
+    env:
+      PROJECT_ROOT: ~/yamdb_final
     needs: deploy
     steps:
       - name: executing remote ssh commands to migrate-update
