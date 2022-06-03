@@ -74,18 +74,19 @@ jobs:
   loaddata:
     runs-on: ubuntu-latest
     needs: deploy
-    - name: executing remote ssh commands to migrate-update
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USER }}
-        key: ${{ secrets.SSH_KEY }}
-        passphrase: ${{ secrets.PASSPHRASE }}
-        script: |
-          cd ${{ env.PROJECT_ROOT }}
-          sudo docker-compose exec web python manage.py migrate
-          sudo docker-compose exec web python manage.py collectstatic --no-input
-          sudo docker-compose exec web python manage.py loaddata dump.json
+    steps:
+      - name: executing remote ssh commands to migrate-update
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.SSH_KEY }}
+          passphrase: ${{ secrets.PASSPHRASE }}
+          script: |
+            cd ${{ env.PROJECT_ROOT }}
+            sudo docker-compose exec web python manage.py migrate
+            sudo docker-compose exec web python manage.py collectstatic --no-input
+            sudo docker-compose exec web python manage.py loaddata dump.json
 
   send_message:
     runs-on: ubuntu-latest
