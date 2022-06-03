@@ -2,26 +2,22 @@ name: yamdb_final
 
 on: [push]
 
-
 jobs:
   tests:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
           python-version: 3.7
-
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install flake8 pep8-naming flake8-broken-line flake8-return flake8-isort pytest
-          pip install -r /api_yamdb/requirements.txt
+          pip install -r api_yamdb/requirements.txt
       - name: Test with flake8 and django tests
         run: flake8 . --exclude tests/,*/migrations,venv --per-file-ignores */settings.py:E501 --ignore W503,F811,N806
-
       - name: Test with pytest
         run: pytest
 
@@ -32,19 +28,18 @@ jobs:
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
-
       - name: Login to DockerHub
         uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
+          context: ./api_yamdb
           push: true
           no-cache: true
-          tags: vav134/yamdb_final:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/yamdb_final:latest
 
   deploy:
     runs-on: ubuntu-latest
@@ -55,16 +50,6 @@ jobs:
     steps:
     - name: Check out the repo
       uses: actions/checkout@v2
-
-    - name: copy config files for docker end nginx via ssh key
-      uses: appleboy/scp-action@master
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USER }}
-        key: ${{ secrets.SSH_KEY }}
-        passphrase: ${{ secrets.PASSPHRASE }}
-        target: ${{ env.PROJECT_ROOT }}
-        source: 'infra/docker-compose.yaml, infra/nginx'
     - name: executing remote ssh commands to deploy
       uses: appleboy/ssh-action@master
       with:
@@ -74,7 +59,7 @@ jobs:
         passphrase: ${{ secrets.PASSPHRASE }}
         script: |
           cd ${{ env.PROJECT_ROOT }}
-          sudo docker pull vav134/yamdb_final:latest
+          sudo docker pull ${{ secrets.DOCKER_USERNAME }}/yamdb_final:latest
           sudo docker-compose stop
           sudo docker-compose rm web
           touch .env
@@ -85,6 +70,23 @@ jobs:
           echo DB_HOST=${{ secrets.DB_HOST }} >> .env
           echo DB_PORT=${{ secrets.DB_PORT }} >> .env
           sudo docker-compose up -d
+
+  migrate_update:
+    runs-on: ubuntu-latest
+    needs: deploy
+    - name: executing remote ssh commands to migrate_update
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USER }}
+        key: ${{ secrets.SSH_KEY }}
+        passphrase: ${{ secrets.PASSPHRASE }}
+        script: |
+          cd ${{ env.PROJECT_ROOT }}
+          sudo docker-compose exec web python manage.py migrate
+          sudo docker-compose exec web python manage.py collectstatic --no-input
+          sudo docker-compose exec web python manage.py loaddata dump.json
+
   send_message:
     runs-on: ubuntu-latest
     needs: deploy
