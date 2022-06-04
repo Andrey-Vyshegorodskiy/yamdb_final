@@ -18,6 +18,23 @@ http://84.201.141.50/redoc/
 ### Технологии
 Python 3.7, Django 2.2, DRF, JWT, docker
 
+### После развертывания проекта на удаленном сервере, обязательно выполнить: 
+```Bash
+cd yamdb_final
+```
+- Выполнить миграции:
+```Bash
+$ sudo docker-compose exec web python manage.py migrate
+```
+- Собрать статику:
+```Bash
+$ sudo docker-compose exec web python manage.py collectstatic --no-input
+```
+- Заполнить БД тестовыми записями:
+```Bash
+$ sudo docker-compose exec web python manage.py loaddata dump.json
+```
+
 ### Примеры работы с API для всех пользователей
 Подробная документация доступна по адресу /redoc/
 Для неавторизованных пользователей работа с API доступна в режиме чтения,
